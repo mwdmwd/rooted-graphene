@@ -36,7 +36,7 @@ OTA_VERSION=${OTA_VERSION:-'latest'}
 # Find latest magisk version here: https://github.com/pixincreate/Magisk/releases, or:
 # curl --fail -sL https://github.com/pixincreate/Magisk/releases | grep -Po '/pixincreate/Magisk/releases/tag/\K[^"]+' | head -n1
 # renovate: datasource=github-releases packageName=pixincreate/Magisk versioning=loose ignoreUnstable=false
-DEFAULT_MAGISK_VERSION=canary-28104
+DEFAULT_MAGISK_VERSION=canary-30100
 MAGISK_VERSION=${MAGISK_VERSION:-${DEFAULT_MAGISK_VERSION}}
 
 SKIP_CLEANUP=${SKIP_CLEANUP:-''}
