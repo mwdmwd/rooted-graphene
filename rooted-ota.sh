@@ -33,9 +33,9 @@ OTA_VERSION=${OTA_VERSION:-'latest'}
 
 # It's recommended to pin magisk version in combination with AVB_ROOT_VERSION.
 # Breaking changes in magisk might need to be adapted in new avbroot version
-# Find latest magisk version here: https://github.com/pixincreate/Magisk/releases, or:
-# curl --fail -sL https://github.com/pixincreate/Magisk/releases | grep -Po '/pixincreate/Magisk/releases/tag/\K[^"]+' | head -n1
-# renovate: datasource=github-releases packageName=pixincreate/Magisk versioning=loose ignoreUnstable=false
+# Find latest magisk version here: https://github.com/mwdmwd/Magisk/releases, or:
+# curl --fail -sL https://github.com/mwdmwd/Magisk/releases | grep -Po '/mwdmwd/Magisk/releases/tag/\K[^"]+' | head -n1
+# renovate: datasource=github-releases packageName=mwdmwd/Magisk versioning=loose ignoreUnstable=false
 DEFAULT_MAGISK_VERSION=v30.6
 MAGISK_VERSION=${MAGISK_VERSION:-${DEFAULT_MAGISK_VERSION}}
 
@@ -235,7 +235,7 @@ function downloadAndroidDependencies() {
 
   mkdir -p .tmp
   if ! ls ".tmp/magisk-$MAGISK_VERSION.apk" >/dev/null 2>&1 && [[ "${POTENTIAL_ASSETS['magisk']+isset}" ]]; then
-    curl --fail -sLo ".tmp/magisk-$MAGISK_VERSION.apk" "https://github.com/pixincreate/Magisk/releases/download/$MAGISK_VERSION/app-release.apk"
+    curl --fail -sLo ".tmp/magisk-$MAGISK_VERSION.apk" "https://github.com/mwdmwd/Magisk/releases/download/$MAGISK_VERSION/app-release.apk"
   fi
 
   if ! ls ".tmp/$OTA_TARGET.zip" >/dev/null 2>&1; then
@@ -247,7 +247,7 @@ function findLatestVersion() {
   checkMandatoryVariable DEVICE_ID
 
   if [[ "$MAGISK_VERSION" == 'latest' ]]; then
-    MAGISK_VERSION=$(curl --fail -sL https://github.com/pixincreate/Magisk/releases | grep -Po '/pixincreate/Magisk/releases/tag/\K[^"]+' | head -n1)
+    MAGISK_VERSION=$(curl --fail -sL https://github.com/mwdmwd/Magisk/releases | grep -Po '/mwdmwd/Magisk/releases/tag/\K[^"]+' | head -n1)
   fi
   print "Magisk version: $MAGISK_VERSION"
 
