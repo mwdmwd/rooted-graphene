@@ -44,7 +44,7 @@ OTA_VERSION=${OTA_VERSION:-'latest'}
 # Find latest magisk version here: https://github.com/mwdmwd/Magisk/releases, or:
 # curl --fail -sL https://github.com/mwdmwd/Magisk/releases | grep -Po '/mwdmwd/Magisk/releases/tag/\K[^"]+' | head -n1
 # renovate: datasource=github-releases packageName=mwdmwd/Magisk versioning=loose ignoreUnstable=false
-DEFAULT_MAGISK_VERSION=v30.6
+DEFAULT_MAGISK_VERSION=v30.7
 MAGISK_VERSION=${MAGISK_VERSION:-${DEFAULT_MAGISK_VERSION}}
 
 # Version of pixincreate's magisk fork. Its tags don't always match upstream magisk's, e.g. v31.0-3.
