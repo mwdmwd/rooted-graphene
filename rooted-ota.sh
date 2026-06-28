@@ -36,7 +36,7 @@ OTA_VERSION=${OTA_VERSION:-'latest'}
 # Find latest magisk version here: https://github.com/mwdmwd/Magisk/releases, or:
 # curl --fail -sL https://github.com/mwdmwd/Magisk/releases | grep -Po '/mwdmwd/Magisk/releases/tag/\K[^"]+' | head -n1
 # renovate: datasource=github-releases packageName=mwdmwd/Magisk versioning=loose ignoreUnstable=false
-DEFAULT_MAGISK_VERSION=v30.6
+DEFAULT_MAGISK_VERSION=v30.7
 MAGISK_VERSION=${MAGISK_VERSION:-${DEFAULT_MAGISK_VERSION}}
 
 SKIP_CLEANUP=${SKIP_CLEANUP:-''}
