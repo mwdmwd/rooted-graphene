@@ -6,6 +6,8 @@
   ],
   ignorePresets: ["helpers:pinGitHubActionDigests"],
   prHourlyLimit: 0,
+  automerge: false,
+  printConfig: true,
   labels: ["dependencies"],
   vulnerabilityAlerts: {
    labels: ["security", "dependencies"],
@@ -13,9 +15,8 @@
   packageRules: [
     {
       matchPackageNames: ["*"],
-      description: "Automatically merge minor and patch-level updates",
-      matchUpdateTypes: ["minor", "patch" ],
-      automerge: true,
+      description: "Require manual merging for all dependency updates",
+      automerge: false,
     },
   ],
   customManagers: [
