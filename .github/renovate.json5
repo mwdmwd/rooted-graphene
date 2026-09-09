@@ -18,6 +18,12 @@
       description: "Require manual merging for all dependency updates",
       automerge: false,
     },
+    {
+      matchDatasources: ["github-releases"],
+      matchPackageNames: ["pixincreate/Magisk"],
+      ignoreUnstable: false,
+      respectLatest: false,
+    },
   ],
   customManagers: [
     {

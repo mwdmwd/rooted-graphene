@@ -41,7 +41,7 @@ on:
         description: skip building OTA rooted with pixincreate's magisk fork
         type: boolean
         required: false
-        default: true
+        default: false
       upload-test-ota:
         description: Upload OTA to test folder
         required: false
@@ -64,6 +64,9 @@ on:
       magisk-version:
         description: Magisk version
         required: false
+      pixincreate-version:
+        description: Pixincreate Magisk version
+        required: false
 jobs:
   build-device:
     runs-on: ubuntu-latest
@@ -83,14 +86,13 @@ jobs:
           fi
           
           echo "MAGISK_VERSION=$(echo '${{ github.event.inputs.magisk-version || '' }}' | xargs)" >> $GITHUB_ENV
+          echo "PIXINCREATE_VERSION=$(echo '${{ github.event.inputs.pixincreate-version || '' }}' | xargs)" >> $GITHUB_ENV
           echo "OTA_VERSION=$(echo '${{ github.event.inputs.ota-version || '' }}' | xargs)" >> $GITHUB_ENV
           echo "FORCE_OTA_SERVER_UPLOAD=$(echo '${{ github.event.inputs.force-ota-server-upload || '' }}' | xargs)" >> $GITHUB_ENV
           echo "FORCE_BUILD=$(echo '${{ github.event.inputs.force-build || '' }}' | xargs)" >> $GITHUB_ENV
           echo "UPLOAD_TEST_OTA=$(echo '${{ github.event.inputs.upload-test-ota || '' }}' | xargs)" >> $GITHUB_ENV
           echo "SKIP_ROOTLESS=$(echo '${{ github.event.inputs.skip-rootless || '' }}' | xargs)" >> $GITHUB_ENV
-          # Note the explicit 'true' fallback: an empty value would enable the flavor,
-          # because the script only skips on the literal string "true"
-          echo "SKIP_PIXINCREATE=$(echo '${{ github.event.inputs.skip-pixincreate || 'true' }}' | xargs)" >> $GITHUB_ENV
+          echo "SKIP_PIXINCREATE=$(echo '${{ github.event.inputs.skip-pixincreate || 'false' }}' | xargs)" >> $GITHUB_ENV
           echo "SKIP_RELEASE=$(echo '${{ github.event.inputs.skip-release || '' }}' | xargs)" >> $GITHUB_ENV
           
           if [[ "${{ github.event_name }}" == "push" ]]  || [[ "${{ github.event_name }}" == "pull_request" ]]; then
