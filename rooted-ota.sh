@@ -34,18 +34,21 @@ SKIP_MAGISK=${SKIP_MAGISK:-'false'}
 # which contains patches that make zygisk work on GrapheneOS.
 # https://github.com/pixincreate/Magisk
 # Note that modules verifying magisk's signature won't work with this fork.
-# Enable by setting to "false".
-SKIP_PIXINCREATE=${SKIP_PIXINCREATE:-'true'}
+# Enabled by default in this fork, disable by setting to "true".
+SKIP_PIXINCREATE=${SKIP_PIXINCREATE:-'false'}
 # https://grapheneos.org/releases#stable-channel
 OTA_VERSION=${OTA_VERSION:-'latest'}
 
 # It's recommended to pin magisk version in combination with AVB_ROOT_VERSION.
 # Breaking changes in magisk might need to be adapted in new avbroot version
-# Find latest magisk version here: https://github.com/mwdmwd/Magisk/releases, or:
-# curl --fail -sL https://github.com/mwdmwd/Magisk/releases | grep -Po '/mwdmwd/Magisk/releases/tag/\K[^"]+' | head -n1
-# renovate: datasource=github-releases packageName=mwdmwd/Magisk versioning=loose ignoreUnstable=false
+# Find upstream Magisk releases here: https://github.com/topjohnwu/Magisk/releases
+# renovate: datasource=github-releases packageName=topjohnwu/Magisk versioning=semver-coerced
 DEFAULT_MAGISK_VERSION=v30.7
 MAGISK_VERSION=${MAGISK_VERSION:-${DEFAULT_MAGISK_VERSION}}
+
+# renovate: datasource=github-releases packageName=pixincreate/Magisk versioning=semver-coerced
+DEFAULT_PIXINCREATE_VERSION=v31.0
+PIXINCREATE_VERSION=${PIXINCREATE_VERSION:-${DEFAULT_PIXINCREATE_VERSION}}
 
 SKIP_CLEANUP=${SKIP_CLEANUP:-''}
 
@@ -159,7 +162,7 @@ function checkBuildNecessary() {
 
     if [[ "$SKIP_PIXINCREATE" != 'true' ]]; then
       # e.g. oriole-2023121200-pixincreate-v30.7-4647f74-dirty.zip
-      POTENTIAL_ASSETS['pixincreate']="${DEVICE_ID}-${OTA_VERSION}-${currentCommit}-pixincreate-${MAGISK_VERSION}$(createAssetSuffix).zip"
+      POTENTIAL_ASSETS['pixincreate']="${DEVICE_ID}-${OTA_VERSION}-${currentCommit}-pixincreate-${PIXINCREATE_VERSION}$(createAssetSuffix).zip"
     else
       printGreen "SKIP_PIXINCREATE set, not creating pixincreate OTA"
     fi
@@ -254,12 +257,12 @@ function downloadAndroidDependencies() {
 
   mkdir -p .tmp
   if ! ls ".tmp/magisk-$MAGISK_VERSION.apk" >/dev/null 2>&1 && [[ "${POTENTIAL_ASSETS['magisk']+isset}" ]]; then
-    curl --fail -sLo ".tmp/magisk-$MAGISK_VERSION.apk" "https://github.com/mwdmwd/Magisk/releases/download/$MAGISK_VERSION/app-release.apk"
+    curl --fail -sLo ".tmp/magisk-$MAGISK_VERSION.apk" "https://github.com/topjohnwu/Magisk/releases/download/$MAGISK_VERSION/Magisk-$MAGISK_VERSION.apk"
   fi
 
-  # pixincreate's fork releases its APK as "app-release.apk" and uses the same tags as upstream magisk
-  if ! ls ".tmp/pixincreate-$MAGISK_VERSION.apk" >/dev/null 2>&1 && [[ "${POTENTIAL_ASSETS['pixincreate']+isset}" ]]; then
-    curl --fail -sLo ".tmp/pixincreate-$MAGISK_VERSION.apk" "https://github.com/pixincreate/Magisk/releases/download/$MAGISK_VERSION/app-release.apk"
+  # Current pixincreate releases use a versioned APK filename.
+  if ! ls ".tmp/pixincreate-$PIXINCREATE_VERSION.apk" >/dev/null 2>&1 && [[ "${POTENTIAL_ASSETS['pixincreate']+isset}" ]]; then
+    curl --fail -sLo ".tmp/pixincreate-$PIXINCREATE_VERSION.apk" "https://github.com/pixincreate/Magisk/releases/download/$PIXINCREATE_VERSION/Magisk-$PIXINCREATE_VERSION.apk"
   fi
 
   if ! ls ".tmp/$OTA_TARGET.zip" >/dev/null 2>&1; then
@@ -271,9 +274,10 @@ function findLatestVersion() {
   checkMandatoryVariable DEVICE_ID
 
   if [[ "$MAGISK_VERSION" == 'latest' ]]; then
-    MAGISK_VERSION=$(curl --fail -sL https://github.com/mwdmwd/Magisk/releases | grep -Po '/mwdmwd/Magisk/releases/tag/\K[^"]+' | head -n1)
+    MAGISK_VERSION=$(curl --fail -sL -I -o /dev/null -w '%{url_effective}' https://github.com/topjohnwu/Magisk/releases/latest | sed 's/.*\/tag\///;')
   fi
   print "Magisk version: $MAGISK_VERSION"
+  print "Pixincreate version: $PIXINCREATE_VERSION"
 
   # Search for a new version grapheneos.
   # e.g. https://releases.grapheneos.org/shiba-stable
@@ -354,7 +358,7 @@ function patchOTAs() {
         args+=("--patch-arg=--magisk-preinit-device" "--patch-arg" "$MAGISK_PREINIT_DEVICE")
       fi
       if [[ "$flavor" == 'pixincreate' ]]; then
-        args+=("--patch-arg=--magisk" "--patch-arg" ".tmp/pixincreate-$MAGISK_VERSION.apk")
+        args+=("--patch-arg=--magisk" "--patch-arg" ".tmp/pixincreate-$PIXINCREATE_VERSION.apk")
         args+=("--patch-arg=--magisk-preinit-device" "--patch-arg" "$MAGISK_PREINIT_DEVICE")
       fi
 
