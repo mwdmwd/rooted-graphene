@@ -43,7 +43,7 @@ OTA_VERSION=${OTA_VERSION:-'latest'}
 # Breaking changes in magisk might need to be adapted in new avbroot version
 # Find upstream Magisk releases here: https://github.com/topjohnwu/Magisk/releases
 # renovate: datasource=github-releases packageName=topjohnwu/Magisk versioning=semver-coerced
-DEFAULT_MAGISK_VERSION=v30.7
+DEFAULT_MAGISK_VERSION=v31.1
 MAGISK_VERSION=${MAGISK_VERSION:-${DEFAULT_MAGISK_VERSION}}
 
 # renovate: datasource=github-releases packageName=pixincreate/Magisk versioning=semver-coerced
