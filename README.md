@@ -286,14 +286,14 @@ See [release-multiple.yaml](https://github.com/rooted-graphene/ota/blob/main/.gi
 
 How to extract:
 
-* Get boot.img either from factory image or from OTA via
+* Get the Magisk target image from the factory image or OTA (`init_boot` on Pixel 7 and newer; `boot` on older Pixels):
   ```shell
      avbroot ota extract \
      --input /path/to/ota.zip \
      --directory . \
-     --boot-only
+     --partition init_boot
   ```
-* Install magisk, patch boot.img, look for this string in the output:  
+* Install magisk, patch the extracted image, look for this string in the output:
   `Pre-init storage partition device ID: <name>`
 * Alternatively, extract from the patched boot.img: 
   ```shell
@@ -372,9 +372,9 @@ Another alternative might be to use a version of magisk (like [the one maintaine
 This still has some limitations, like [certain modules checking for magisk's signature won't work](https://github.com/schnatterer/rooted-graphene/commit/da0cd817c2665798df46df1aeb7caef9d98b79d0#r141746606).
 
 This variant can be built as an additional `pixincreate` flavor, next to the regular `magisk` and `rootless` ones.  
-It is disabled by default, so it is never silently forced on existing users. Enable it by setting `SKIP_PIXINCREATE=false`
+It is enabled by default in this fork. Disable it with `SKIP_PIXINCREATE=true`
 (or the `skip-pixincreate` input in `release-single.yaml`). It requires `MAGISK_PREINIT_DEVICE` to be set, just like the regular magisk flavor,
-and it reuses `MAGISK_VERSION`, since the fork uses the same tags as upstream magisk.
+and has its own `PIXINCREATE_VERSION` pin because its release tags differ from upstream Magisk's.
 If you only want the `pixincreate` flavor, you can additionally set `SKIP_MAGISK=true`.
 
 The resulting OTAs are published as a separate flavor, so in Custota you would point to the `pixincreate` path of your OTA server, e.g.
