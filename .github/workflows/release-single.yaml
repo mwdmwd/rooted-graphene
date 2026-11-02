@@ -101,7 +101,7 @@ jobs:
             echo "SKIP_RELEASE=true" >> $GITHUB_ENV
             # Make sure the pixincreate flavor keeps building
             echo "SKIP_PIXINCREATE=false" >> $GITHUB_ENV
-            echo "GITHUB_TOKEN=must-be-set-but-is-not-used" >> $GITHUB_ENV
+            echo "GITHUB_TOKEN=${{ github.token }}" >> $GITHUB_ENV
           else
             echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           fi
